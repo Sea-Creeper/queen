@@ -17,7 +17,7 @@ public class HttpOperationService {
 
   @Autowired private KafkaTemplate<String, HttpOperation> kafkaTemplate;
 
-  @Value(value = "${com.seacreeper.kafka.topic.queen.http}")
+  @Value(value = "${seacreeper.kafka.topic.queen.http}")
   private String topic;
 
   public Status publishToMq(@NonNull final HttpOperation httpOperation) {

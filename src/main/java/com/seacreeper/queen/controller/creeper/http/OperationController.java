@@ -1,7 +1,9 @@
 package com.seacreeper.queen.controller.creeper.http;
 
 import com.seacreeper.queen.model.HttpOperation;
+import com.seacreeper.queen.model.HttpRequest;
 import com.seacreeper.queen.service.HttpOperationService;
+import com.seacreeper.queen.service.UserService;
 import javax.validation.Valid;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class OperationController {
 
   @Autowired private HttpOperationService httpOperationService;
+  @Autowired private UserService userService;
 
   @RequestMapping(
       value = "/",
       consumes = {MediaType.APPLICATION_JSON_VALUE},
       method = {RequestMethod.POST, RequestMethod.PUT})
-  public ResponseEntity<Object> submitUrl(@Valid @RequestBody HttpOperation httpOperation) {
+  public ResponseEntity<Object> submitUrl(@Valid @RequestBody HttpRequest httpRequest) {
+    userService.insertToken(httpRequest.getToken());
+    val httpOperation = new HttpOperation(httpRequest.getToken(), httpRequest.getUrl());
     httpOperationService.publishToMq(httpOperation);
     val location = ServletUriComponentsBuilder.fromCurrentRequest().path("/status").build().toUri();
     return ResponseEntity.created(location).build();
