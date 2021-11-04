@@ -13,7 +13,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
 
-@Configuration
+//@Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
   @Value("${seacreeper.mongodb.connectio.string}")
